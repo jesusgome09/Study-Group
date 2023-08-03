@@ -1,63 +1,93 @@
-#Aqui se pueden hacer todo a lo que respecta con tkinter
 import tkinter as tk
 import customtkinter as ct
 import logic
-from tkinter import ttk
+import webbrowser
+
 
 class Window(tk.Tk):
     def __init__(self):
         super().__init__()
         self.title("QR Total")
-        self.geometry("500x500")
+        self.geometry("500x500+400+100")
         self.resizable(False, False)
-        self.config(bg="white")
+
         self.inicio = Inicio(self)
         self.inicio.pack(expand=True, fill="both")
 
-class Inicio(tk.Frame):
+        self.crearqr = CrearQr(self)
+        self.leerqr = LeerQr(self)
+
+
+class Inicio(tk.Frame): # Terminada
     def __init__(self, parent):
         super().__init__(parent)
 
-
-        #empezar a crear los widgets
+        # empezar a crear los widgets
 
         self.frame = tk.Frame(self)
 
-        self.titulo = tk.Label(self, text="QR Total", font=("Comic Sans MS", 40, 'italic'))
-
-        self.boton_crear = ct.CTkButton(self.frame, text="Crear QR",
-        font=("Comic Sans MS", 30, 'italic'),
-        width=230,height=50
+        self.titulo = tk.Label(
+            self, text="QR Total", font=("Comic Sans MS", 40, "italic")
         )
 
-        self.boton_leer = ct.CTkButton(self.frame, text="Leer QR",
-        font=("Comic Sans MS", 30, 'italic'),
-        width=230,height=50
+        self.boton_crear = ct.CTkButton(
+            self.frame,
+            text="Crear QR",
+            font=("Comic Sans MS", 30, "italic"),
+            width=210,
+            height=50,
+            command=self.crear_qr
         )
 
-        self.boton_github = ct.CTkButton(self.frame, text="GitHub",
-        font=("Comic Sans MS", 30, 'italic'),
-        width=230,height=50
+        self.boton_leer = ct.CTkButton(
+            self.frame,
+            text="Leer QR",
+            font=("Comic Sans MS", 30, "italic"),
+            width=210,
+            height=50,
+            command=self.leer_qr
         )
 
+        self.boton_github = ct.CTkButton(
+            self.frame,
+            text="GitHub",
+            font=("Comic Sans MS", 30, "italic"),
+            width=210,
+            height=50,
+        )
 
-        #posicionar los widgets
+        # posicionar los widgets
         self.titulo.pack(padx=40, pady=20)
-        self.frame.pack(fill='x', pady=40)
+        self.frame.pack(fill="x", pady=40)
         self.boton_crear.pack(padx=20, pady=14)
         self.boton_leer.pack(padx=20, pady=14)
         self.boton_github.pack(padx=20, pady=14)
+
+    def crear_qr(self):
+        self.frame.pack_forget()
+        parent = self.master
+        parent.crearqr.pack(expand=True, fill="both")
+
+    def leer_qr(self):
+        self.frame.pack_forget()
+        parent = self.master
+        parent.leerqr.pack(expand=True, fill="both")
+
+    def github(self):
+        webbrowser.open("google.com")
 
 
 class CrearQr(tk.Frame):
     def __init__(self, parent):
         super().__init__(parent)
 
-        #empezar a crear los widgets
-        self.entry_info = ct.CTkEntry(self, placeholder_text="Informacion a guardar en el QR")
+        # empezar a crear los widgets
+        self.entry_info = ct.CTkEntry(
+            self, placeholder_text="Informacion a guardar en el QR"
+        )
         self.boton_crear = ct.CTkButton(self, text="Crear QR", command=self.crear_qr)
 
-        #posicionar los widgets
+        # posicionar los widgets
         self.entry_info.pack()
         self.boton_crear.pack()
 
@@ -67,17 +97,24 @@ class CrearQr(tk.Frame):
 
     # Leer Qr
 
-class leer_qr(tk.Frame):
+
+class LeerQr(tk.Frame):
     def __init__(self, parent):
         super().__init__(parent)
 
         # Empezar a crear los widgets
 
-        self.titulo = tk.Label(self, text="Leer QR", font=("Comic Sans MS", 35, 'italic'))
+        self.titulo = tk.Label(
+            self, text="Leer QR", font=("Comic Sans MS", 35, "italic")
+        )
 
-        self.parrafo = tk.Label(self, text="Adjuntar imagen del QR", font=("Comic Sans MS", 20, 'italic'))
+        self.parrafo = tk.Label(
+            self, text="Adjuntar imagen del QR", font=("Comic Sans MS", 20, "italic")
+        )
 
-        self.boton_regresar = ct.CTkButton(self, text="Regresar", font=("Comic Sans MS", 14))
+        self.boton_regresar = ct.CTkButton(
+            self, text="Regresar", font=("Comic Sans MS", 14)
+        )
 
         self.boton_leer_qr = ct.CTkButton(self, text="Leer", font=("Comic Sans MS", 14))
 
@@ -88,9 +125,7 @@ class leer_qr(tk.Frame):
         self.boton_regresar.pack()
         self.boton_leer_qr.pack()
 
-
-
-        #aqui los llamas con un .pack()
+        # aqui los llamas con un .pack()
         # El pack es para posicionar los widgets y mostrarlos sin el no los veras
         # El pack tiene parametros como:
         # padx: para el padding en el eje x
@@ -101,9 +136,10 @@ class leer_qr(tk.Frame):
 
 
 
+def run():
+    window = Window()
+    frame = Inicio(window)
+    window.frame = frame
+    window.mainloop()
 
-
-window = Window()
-frame = Inicio(window)
-window.frame = frame
-window.mainloop()
+run()
