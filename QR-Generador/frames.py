@@ -1,5 +1,7 @@
 #Aqui se pueden hacer todo a lo que respecta con tkinter
 import tkinter as tk
+import customtkinter as ct
+import logic
 
 class Window(tk.Tk):
     def __init__(self):
@@ -19,6 +21,17 @@ class Inicio(tk.Frame):
         super().__init__(parent)
 
         #empezar a crear los widgets
+        self.entry_info = ct.CTkEntry(self, placeholder_text="Informacion a guardar en el QR")
+        self.boton_crear = ct.CTkButton(self, text="Crear QR", command=self.crear_qr)
+
+        #posicionar los widgets
+        self.entry_info.pack()
+        self.boton_crear.pack()
+
+    def crear_qr(self):
+        qr = logic.make_qr(self.entry_info.get())
+        print(qr)
+
 
 
 window = Window()
