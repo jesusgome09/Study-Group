@@ -13,4 +13,5 @@ def make_qr(informacion):
     else:
         return False
 
-
+def view_qr():
+    pass
