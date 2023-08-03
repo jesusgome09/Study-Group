@@ -6,7 +6,7 @@ Los proyectos son:
 
 ### El equipo esta conformado por:
 1. @jesusgome09
-2. s
-3. s
-4. s
+2. @
+3. @
+4. @
    
