@@ -9,4 +9,6 @@ Los proyectos son:
 2. @
 3. @
 4. @
-   
+
+
+   Ruta[https://www.freecodecamp.org/espanol/news/25-proyectos-en-python-para-principiantes/#juego-de-la-serpiente]
