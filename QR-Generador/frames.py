@@ -99,10 +99,6 @@ class leer_qr(tk.Frame):
         # fill: para que se llene el espacio que tiene disponible, puede ser "x", "y", "both"
         # expand: para que se expanda el widget, puede ser True o Falsess
 
-    def leer_qr(self):
-        qr = logic.read_qr()
-        print(qr)
-
 
 
 
