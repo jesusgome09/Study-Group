@@ -18,16 +18,31 @@ class Inicio(tk.Frame):
         super().__init__(parent)
 
         #empezar a crear los widgets
+        self.frame = tk.Frame(self)
+
         self.titulo = tk.Label(self, text="QR Total", font=("Comic Sans MS", 35, 'italic'))
-        self.boton_crear = ct.CTkButton(self, text="Crear QR")
-        self.boton_leer = ct.CTkButton(self, text="Leer QR")
-        self.boton_github = ct.CTkButton(self, text="GitHub")
+
+        self.boton_crear = ct.CTkButton(self.frame, text="Crear QR",
+        font=("Comic Sans MS", 30, 'italic'),
+        width=240,height=50
+        )
+
+        self.boton_leer = ct.CTkButton(self.frame, text="Leer QR",
+        font=("Comic Sans MS", 30, 'italic'),
+        width=240,height=50
+        )
+
+        self.boton_github = ct.CTkButton(self.frame, text="GitHub",
+        font=("Comic Sans MS", 30, 'italic'),
+        width=240,height=50
+        )
 
         #posicionar los widgets
-        self.titulo.pack(padx=10, pady=10)
-        self.boton_crear.pack(padx=10, pady=10)
-        self.boton_leer.pack(padx=10, pady=10)
-        self.boton_github.pack(padx=10, pady=10)
+        self.titulo.pack(padx=40, pady=20)
+        self.frame.pack(fill='x', pady=40)
+        self.boton_crear.pack(padx=20, pady=14)
+        self.boton_leer.pack(padx=20, pady=14)
+        self.boton_github.pack(padx=20, pady=14)
 
 class CrearQr(tk.Frame):
     def __init__(self, parent):
@@ -53,15 +68,22 @@ class leer_qr(tk.Frame):
 
         # Empezar a crear los widgets
 
-        self.label = tk.Label(self, text="Leer QR", font=("Comic Sans MS", 35, 'italic'))
-        self.label = tk.Label(self, text="Adjuntar imagen del QR", font=("Comic Sans MS", 20, 'italic'))
-        self.boton_leer = ct.CTkButton(self, text="Regresar")
-        self.boton_leer = ct.CTkButton(self, text="Leer")
+        self.titulo = tk.Label(self, text="Leer QR", font=("Comic Sans MS", 35, 'italic'))
+
+        self.parrafo = tk.Label(self, text="Adjuntar imagen del QR", font=("Comic Sans MS", 20, 'italic'))
+
+        self.boton_regresar = ct.CTkButton(self, text="Regresar", font=("Comic Sans MS",))
+
+        self.boton_leer_qr = ct.CTkButton(self, text="Leer")
 
         # Posicionar los widgets
 
-        self.label.pack()
-        self.boton_leer.pack()
+        self.titulo.pack()
+        self.parrafo.pack()
+        self.boton_regresar.pack()
+        self.boton_leer_qr.pack()
+
+
 
         #aqui los llamas con un .pack()
         # El pack es para posicionar los widgets y mostrarlos sin el no los veras
