@@ -15,7 +15,9 @@ class Window(tk.Tk):
         self.title("QR Total")
         self.geometry("500x500+400+100")
         self.resizable(False, False)
-        self.iconbitmap(path + "qr.ico")
+
+        self.incono = tk.PhotoImage(file=path + "icono.png")
+        self.iconphoto(True, self.incono)
 
         self.inicio = Inicio(self)
         self.inicio.pack(expand=True, fill="both")
