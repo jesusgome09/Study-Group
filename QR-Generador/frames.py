@@ -2,6 +2,11 @@ import tkinter as tk
 import customtkinter as ct
 import logic
 import webbrowser
+import os
+
+absolutepath = os.path.abspath(__file__)
+path, filename = os.path.split(absolutepath)
+path = path + "\\"
 
 
 class Window(tk.Tk):
@@ -10,8 +15,8 @@ class Window(tk.Tk):
         self.title("QR Total")
         self.geometry("500x500+400+100")
         self.resizable(False, False)
-        self.iconbitmap("qr.ico")
-        
+        self.iconbitmap(path + "qr.ico")
+
         self.inicio = Inicio(self)
         self.inicio.pack(expand=True, fill="both")
 
@@ -84,7 +89,7 @@ class CrearQr(tk.Frame):
 
         # empezar a crear los widgets
         self.label_titulo = tk.Label(self, text="Crear QR", font=("Comic Sans MS", 35, "italic"))
-        self.label = tk.Label(self, text="Link, informacion, celular, etc.", font=("Comic Sans MS", 20, "italic"))
+        self.label = tk.Label(self, text="Link, informacion, celular, etc.", font=("Comic Sans MS", 12, "italic"))
 
         self.entry_info = ct.CTkEntry(
             self, placeholder_text="www.google.com"
