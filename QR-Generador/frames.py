@@ -13,7 +13,7 @@ class Window(tk.Tk):
     def __init__(self):
         super().__init__()
         self.title("QR Total")
-        self.geometry("500x500+400+100")
+        self.geometry("500x460+400+100")
         self.resizable(False, False)
 
         self.incono = tk.PhotoImage(file=path + "icono.png")
@@ -23,10 +23,11 @@ class Window(tk.Tk):
         self.inicio.pack(expand=True, fill="both")
 
         self.crearqr = CrearQr(self)
+        self.crearqr2 = CrearQr2(self)
         self.leerqr = LeerQr(self)
 
 
-class Inicio(tk.Frame): # Terminada
+class Inicio(tk.Frame):  # Terminada
     def __init__(self, parent):
         super().__init__(parent)
 
@@ -44,7 +45,7 @@ class Inicio(tk.Frame): # Terminada
             font=("Comic Sans MS", 30, "italic"),
             width=210,
             height=50,
-            command=self.crear_qr
+            command=self.crear_qr,
         )
 
         self.boton_leer = ct.CTkButton(
@@ -53,7 +54,7 @@ class Inicio(tk.Frame): # Terminada
             font=("Comic Sans MS", 30, "italic"),
             width=210,
             height=50,
-            command=self.leer_qr
+            command=self.leer_qr,
         )
 
         self.boton_github = ct.CTkButton(
@@ -90,25 +91,107 @@ class CrearQr(tk.Frame):
         super().__init__(parent)
 
         # empezar a crear los widgets
-        self.label_titulo = tk.Label(self, text="Crear QR", font=("Comic Sans MS", 35, "italic"))
-        self.label = tk.Label(self, text="Link, informacion, celular, etc.", font=("Comic Sans MS", 12, "italic"))
+        self.frame1 = tk.Frame(self)
+
+        self.label_titulo = tk.Label(
+            self, text="Crear QR", font=("Comic Sans MS", 35, "italic")
+        )
+        self.label = tk.Label(
+            self.frame1,
+            text="Link, informacion, celular, etc.",
+            font=("Comic Sans MS", 12, "italic"),
+        )
 
         self.entry_info = ct.CTkEntry(
-            self, placeholder_text="www.google.com"
+            self.frame1,
+            placeholder_text="www.google.com",
+            width=300,
+            font=("Comic Sans MS", 12, "italic"),
+            height=40,
         )
-        self.boton_crear = ct.CTkButton(self, text="Crear QR", command=self.crear_qr)
+        self.boton_crear = ct.CTkButton(
+            self,
+            text="Crear",
+            font=("Comic Sans MS", 30, "italic"),
+            width=210,
+            height=50,
+            command=self.crear_qr
+        )
+        self.boton_regresar = ct.CTkButton(
+            self,
+            text="Regresar",
+            font=("Comic Sans MS", 30, "italic"),
+            width=210,
+            height=50,
+            command=self.regresar
+        )
 
         # posicionar los widgets
-        self.label_titulo.pack()
-        self.label.pack()
+        self.label_titulo.pack(pady=30)
+        self.label.pack(pady=10)
         self.entry_info.pack()
-        self.boton_crear.pack()
+        self.frame1.pack(pady=50)
+        self.boton_regresar.pack(pady=10, side="left", padx=20)
+        self.boton_crear.pack(pady=10, side="left", padx=20)
 
     def crear_qr(self):
-        qr = logic.make_qr(self.entry_info.get())
-        print(qr)
+        if logic.make_qr(self.entry_info.get()):
+            self.pack_forget()
+            parent = self.master
+            parent.crearqr2.pack(expand=True, fill="both")
+        else:
+            tk.messagebox.showerror("Error", "No se puede crear un QR vacio")
+
+    def regresar(self):
+        self.pack_forget()
+        parent = self.master
+        parent.inicio.pack(expand=True, fill="both")
+
+class CrearQr2(tk.Frame):
+    def __init__(self, parent):
+        super().__init__(parent)
+
+        # empezar a crear los widgets
+        self.frame1 = tk.Frame(self)
+
+        self.label_titulo = tk.Label(
+            self, text="Crear QR", font=("Comic Sans MS", 35, "italic")
+        )
+        self.imagen = tk.PhotoImage(file=path + "QR.png")
+        self.imagen = self.imagen.subsample(2, 2)
+        self.label_imagen = tk.Label(self, image=self.imagen)
 
 
+        self.boton_crear = ct.CTkButton(
+            self,
+            text="Guardar",
+            font=("Comic Sans MS", 30, "italic"),
+            width=210,
+            height=50,
+
+        )
+        self.boton_regresar = ct.CTkButton(
+            self,
+            text="Regresar",
+            font=("Comic Sans MS", 30, "italic"),
+            width=210,
+            height=50,
+            command=self.regresar
+        )
+
+        # posicionar los widgets
+        self.label_titulo.pack(pady=20)
+        self.label_imagen.pack(pady=20)
+        self.boton_regresar.pack(side="left", padx=20, pady=10)
+        self.boton_crear.pack(side="left", padx=20, pady=10)
+
+
+    def regresar(self):
+
+        os.remove(path + "QR.png")
+        self.pack_forget()
+        parent = self.master
+        parent.crearqr.pack(expand=True, fill="both")
 
 
 class LeerQr(tk.Frame):
@@ -148,11 +231,11 @@ class LeerQr(tk.Frame):
         # expand: para que se expanda el widget, puede ser True o Falsess
 
 
-
 def run():
     window = Window()
     frame = Inicio(window)
     window.frame = frame
     window.mainloop()
+
 
 run()
