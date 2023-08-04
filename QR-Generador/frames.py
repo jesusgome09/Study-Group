@@ -1,8 +1,12 @@
+import os
 import tkinter as tk
+import webbrowser
+from tkinter import filedialog
+
 import customtkinter as ct
 import logic
-import webbrowser
-import os
+from PIL import Image, ImageTk
+from tkinterdnd2 import DND_FILES, TkinterDnD
 
 absolutepath = os.path.abspath(__file__)
 path, filename = os.path.split(absolutepath)
@@ -86,7 +90,7 @@ class Inicio(tk.Frame):  # Terminada
         webbrowser.open("google.com")
 
 
-class CrearQr(tk.Frame):
+class CrearQr(tk.Frame): # Terminada
     def __init__(self, parent):
         super().__init__(parent)
 
@@ -157,9 +161,17 @@ class CrearQr2(tk.Frame):
         self.label_titulo = tk.Label(
             self, text="Crear QR", font=("Comic Sans MS", 35, "italic")
         )
-        self.imagen = tk.PhotoImage(file=path + "QR.png")
-        self.imagen = self.imagen.subsample(2, 2)
-        self.label_imagen = tk.Label(self, image=self.imagen)
+
+        if os.path.exists(path + "QR.png"):
+            self.imagen = tk.PhotoImage(file=path + "QR.png")
+            self.imagen = self.imagen.subsample(2, 2)
+            self.label_imagen = tk.Label(self, image=self.imagen)
+        else:
+            self.imagen = tk.PhotoImage(file=path + "no_existe.png")
+            self.imagen = self.imagen.subsample(9, 9)
+            self.label_imagen = tk.Label(self, image=self.imagen)
+
+        self.bind("<Visibility>", self.actualizar)
 
 
         self.boton_crear = ct.CTkButton(
@@ -185,13 +197,37 @@ class CrearQr2(tk.Frame):
         self.boton_regresar.pack(side="left", padx=20, pady=10)
         self.boton_crear.pack(side="left", padx=20, pady=10)
 
-
+    def actualizar(self):
+        self.update()
     def regresar(self):
 
         os.remove(path + "QR.png")
         self.pack_forget()
         parent = self.master
         parent.crearqr.pack(expand=True, fill="both")
+
+    def guardar_como(self):
+
+        def guardar_imagen():
+            file_path = filedialog.asksaveasfilename(defaultextension=".png", filetypes=[("PNG files", "*.png")])
+            if file_path:
+                image.save(file_path)
+
+    # Carga de imagen de ejemplo (adapta esto a tu generación de imagen)
+        image_path = path + "QR.png"
+        image = Image.open(image_path)
+
+        root = TkinterDnD.Tk()
+        root.title("Guardar Imagen")
+
+    # Agregar aquí la generación de tu imagen en un widget (por ejemplo, en un Label)
+
+    # Botón de guardar
+        guardar_btn = tk.Button(root, text="Guardar como", command=guardar_imagen)
+        guardar_btn.pack()
+
+
+        root.mainloop()
 
 
 class LeerQr(tk.Frame):
