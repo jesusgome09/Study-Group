@@ -66,6 +66,7 @@ class Inicio(tk.Frame):  # Terminada
             font=("Comic Sans MS", 30, "italic"),
             width=210,
             height=50,
+            command=self.github,
         )
 
         # posicionar los widgets
@@ -86,7 +87,7 @@ class Inicio(tk.Frame):  # Terminada
         parent.leerqr.pack(expand=True, fill="both")
 
     def github(self):
-        webbrowser.open("google.com")
+        webbrowser.open("https://github.com/jesusgome09/Study-Group/tree/main/QR-Generador")
 
 
 class CrearQr(tk.Frame): # Terminada
@@ -263,4 +264,4 @@ def run():
     window.mainloop()
 
 
-run()
+run() #Eliminar esto si vas a importar este archivo
