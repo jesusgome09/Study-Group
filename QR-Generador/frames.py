@@ -1,6 +1,7 @@
 import os
 import tkinter as tk
 import webbrowser
+from tkinter import filedialog
 
 from PIL import Image
 import customtkinter as ct
@@ -28,9 +29,10 @@ class Window(tk.Tk):
         self.crearqr = CrearQr(self)
         self.crearqr2 = CrearQr2(self)
         self.leerqr = LeerQr(self)
+        self.leerqr2 = LeerQr2(self)
 
 
-class Inicio(tk.Frame):  # Terminada
+class Inicio(tk.Frame):  
     def __init__(self, parent):
         super().__init__(parent)
 
@@ -90,7 +92,7 @@ class Inicio(tk.Frame):  # Terminada
         webbrowser.open("https://github.com/jesusgome09/Study-Group/tree/main/QR-Generador")
 
 
-class CrearQr(tk.Frame): # Terminada
+class CrearQr(tk.Frame):
     def __init__(self, parent):
         super().__init__(parent)
 
@@ -226,42 +228,130 @@ class LeerQr(tk.Frame):
 
         # Empezar a crear los widgets
 
+        self.frame1 = tk.Frame(self)
+
         self.titulo = tk.Label(
             self, text="Leer QR", font=("Comic Sans MS", 35, "italic")
         )
 
         self.parrafo = tk.Label(
-            self, text="Adjuntar imagen del QR", font=("Comic Sans MS", 20, "italic")
+            self, text="Adjuntar imagen del QR", font=("Comic Sans MS", 15, "italic")
+        )
+
+        self.boton_adjuntar = ct.CTkButton(
+            self,
+            text="adjuntar",
+            font=("Comic Sans MS", 20, "italic"),
+            command=self.adjuntar,
+        )
+        self.boton_regresar = ct.CTkButton(
+            self.frame1,
+            text="Regresar",
+            font=("Comic Sans MS", 30, "italic"),
+            width=210,
+            height=50,
+            command=self.regresar,
+        )
+
+        self.boton_leer_qr = ct.CTkButton(
+            self.frame1,
+            text="Leer",
+            font=("Comic Sans MS", 30, "italic"),
+            width=210,
+            height=50,
+            command=self.leer,
+        )
+        self.label = tk.Label(
+            self,
+            text="",
+        )
+        # Posicionar los widgets
+
+        self.titulo.pack(pady=30)
+        self.parrafo.pack(pady=20)
+        self.boton_adjuntar.pack()
+        self.label.pack(pady=10)
+        self.frame1.pack(side="bottom",pady=20)
+        self.boton_regresar.pack(pady=10, side="left", padx=20)
+        self.boton_leer_qr.pack(pady=10, side="right", padx=20)
+        self.boton_leer_qr.configure(state="disabled")
+
+    def regresar(self):
+        self.pack_forget()
+        parent = self.master
+        parent.inicio.pack(expand=True, fill="both")
+
+    def leer(self):
+        self.label.configure(text="")
+        self.boton_adjuntar.configure(state="disabled")
+
+        self.pack_forget()
+        parent = self.master
+        parent.leerqr2.pack(expand=True, fill="both")
+
+    def adjuntar(self):
+        file_ = filedialog.askopenfilename(filetypes=[(".png", "*")])
+        if file_:
+            self.label.configure(text=file_)
+            self.boton_leer_qr.configure(state="normal")
+            with open((path+"direccion.txt"), 'w') as f:
+                f.write(file_)
+
+class LeerQr2(tk.Frame):
+    def __init__(self, parent):
+        super().__init__(parent)
+
+        # Empezar a crear los widgets
+        self.bind("<Visibility>", self.actualizar)
+
+
+        self.titulo = tk.Label(
+            self, text="Leer QR", font=("Comic Sans MS", 35, "italic")
+        )
+        imagen = tk.PhotoImage(file=path + "no_existe.png")
+        imagen = imagen.subsample(7, 7)
+        self.label_imagen = tk.Label(self, image=imagen)
+
+        self.label_info = tk.Label(
+            self,
+            text="",
         )
 
         self.boton_regresar = ct.CTkButton(
-            self, text="Regresar", font=("Comic Sans MS", 14)
+            self,
+            text="Volver al inicio",
+            font=("Comic Sans MS", 30, "italic"),
+            width=210,
+            height=50,
+            command=self.volver,
         )
-
-        self.boton_leer_qr = ct.CTkButton(self, text="Leer", font=("Comic Sans MS", 14))
 
         # Posicionar los widgets
 
-        self.titulo.pack()
-        self.parrafo.pack()
-        self.boton_regresar.pack()
-        self.boton_leer_qr.pack()
+        self.titulo.pack(pady=30)
+        self.label_imagen.pack(pady=10)
+        self.label_info.pack(pady=10)
+        self.boton_regresar.pack(pady=10, padx=20)
 
-        # aqui los llamas con un .pack()
-        # El pack es para posicionar los widgets y mostrarlos sin el no los veras
-        # El pack tiene parametros como:
-        # padx: para el padding en el eje x
-        # pady: para el padding en el eje y
-        # side: para posicionarlo en el lado que quieras, puede ser "left", "right", "top", "bottom"
-        # fill: para que se llene el espacio que tiene disponible, puede ser "x", "y", "both"
-        # expand: para que se expanda el widget, puede ser True o Falsess
+    def volver(self):
+        self.pack_forget()
+        parent = self.master
+        parent.inicio.pack(expand=True, fill="both")
 
+    def actualizar(self, event):
+        with open(path+"direccion.txt", 'r') as f:
+            direccion = f.read()
+        os.remove(path+"direccion.txt")
+
+        self.imagen = tk.PhotoImage(file=direccion)
+        self.imagen = self.imagen.subsample(2, 2)
+        self.label_imagen.configure(image=self.imagen, width=200, height=200)
+
+        self.label_info.configure(text=logic.read_qr(direccion))
+        #self.label_info.configure(text='informacion relevante')
 
 def run():
     window = Window()
     frame = Inicio(window)
     window.frame = frame
     window.mainloop()
-
-
-run() #Eliminar esto si vas a importar este archivo
