@@ -1,7 +1,6 @@
 import tkinter as tk
 import customtkinter as ct
 import webbrowser
-from tkinter import Canvas
 
 
 class Window(tk.Tk):
@@ -14,7 +13,7 @@ class Window(tk.Tk):
         self.inicio = Inicio(self)
         self.inicio.pack(fill="both", expand=True)
         self.juego = Juego(self)
-        self.final = Final(self)
+
 
 
 class Inicio(tk.Frame):
@@ -62,7 +61,7 @@ class Juego(tk.Frame):
         self.frame_botones_right = tk.Frame(self, width=150)
 
         self.canvas_tablero = tk.Canvas(
-            self.frame_tablero, width=300, height=300, bg="white"
+            self.frame_tablero, width=300, height=300
         )
         self.puntos_x = tk.Label(
             self.frame_puntos, text="X: 0", font=("Comic Sans MS", 20)
@@ -88,7 +87,7 @@ class Juego(tk.Frame):
         )
 
         self.boton_terminar = ct.CTkButton(
-            self, text="Terminar", font=("Comic Sans MS", 10), width=100, height=25
+            self, text="Terminar", font=("Comic Sans MS", 10), width=100, height=25, command=self.terminar
         )
 
         # Dibujar líneas verticales del tablero
@@ -207,15 +206,16 @@ class Juego(tk.Frame):
             self.plano[i] = 0
             ubicaciones[i].configure(text="")
             ubicaciones[i].configure(state="normal")
+            ubicaciones[i].configure(bg="#f0f0f6")
 
     def siguiente(self, player_actual):
         if player_actual == 1:
-            self.boton_x.configure(state="disabled")
-            self.boton_o.configure(state="normal")
+            self.boton_x.configure(state="disabled", fg_color='#f0f0f6')
+            self.boton_o.configure(state="normal",fg_color='#afaff0')
             self.player_actual = 2
         elif player_actual == 2:
-            self.boton_o.configure(state="disabled")
-            self.boton_x.configure(state="normal")
+            self.boton_o.configure(state="disabled", fg_color='#f0f0f6')
+            self.boton_x.configure(state="normal", fg_color='#67ea7a')
             self.player_actual = 1
 
     def marcar_puntaje(self):
@@ -263,7 +263,8 @@ class Juego(tk.Frame):
             9: self.boton9,
         }
         jugador = {1: "X", 2: "O"}
-        ubicaciones[numero].configure(text=jugador[player], state="disabled")
+        color = {1: "#afaff0", 2: "#67ea7a"}
+        ubicaciones[numero].configure(text=jugador[player], state="disabled", background=color[player])
 
     def presion(self, numero):
         player = self.player_actual
@@ -276,15 +277,34 @@ class Juego(tk.Frame):
                 self.marcar_puntaje()  # listo
             else:
                 self.siguiente(player)  # listo
-                for valor in self.plano.values():
-                    if valor == 0:
-                        break
-                    self.resetear()
+                if self.plano[1] != 0:
+                    if self.plano[2] != 0:
+                        if self.plano[3] != 0:
+                            if self.plano[4] != 0:
+                                if self.plano[5] != 0:
+                                    if self.plano[6] != 0:
+                                        if self.plano[7] != 0:
+                                            if self.plano[8] != 0:
+                                                if self.plano[9] != 0:
+                                                    self.resetear()
+    def terminar(self):
+        if tk.messagebox.askquestion("Terminar", "¿Estás seguro de que quieres terminar el juego?") == "yes":
+            ganador = "Ambos ganaron!, fue un empate"
+            x = self.puntos[1]
+            y = self.puntos[2]
+            if x > y:
+                ganador = "X con " + str(x) + " puntos"
+            elif y > x:
+                ganador = "O con " + str(y) + " puntos"
+
+            tk.messagebox.showinfo(title="GameOver", message=f"El Gananador es: {ganador}")
+            self.resetear()
+            self.pack_forget()
+            parent = self.master
+            parent.inicio.pack(fill="both", expand=True)
 
 
-class Final(tk.Frame):
-    def __init__(self, parent):
-        super().__init__(parent)
+
 
 
 def run():
@@ -294,4 +314,4 @@ def run():
     window.mainloop()
 
 
-run()
+
